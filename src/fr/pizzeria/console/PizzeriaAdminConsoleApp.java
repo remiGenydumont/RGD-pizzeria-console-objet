@@ -3,96 +3,45 @@ package fr.pizzeria.console;
 
 import java.util.Scanner;
 
-import fr.pizzeria.model.Pizza;
+import fr.pizza.dao.PizzaArrayDao;
+import fr.pizza.services.AjouterPizzaService;
+import fr.pizza.services.ListerPizzasService;
+import fr.pizza.services.ModifierPizzaService;
+import fr.pizza.services.SupprimerPizzaService;
 
 public class PizzeriaAdminConsoleApp {
 
 	public static void main(String[] args) {
-		Pizza[] listPizza = {
-				new Pizza(0,"PEP", "Pépéroni", 12.50),
-				new Pizza(1,"MAR", "Margherita", 14.00), 
-				new Pizza(2,"REIN", "La Reine", 11.50),
-				new Pizza(3,"FRO", "La 4 fromages", 12.00),
-				new Pizza(4,"CAN", "La cannibale", 12.50),
-				new Pizza(5,"SAV", "La savoyarde", 13.00),
-				new Pizza(6,"ORI", "L’orientale", 13.50),
-				new Pizza(7,"IND", "L’indienne", 14.00)
-		};
-		byte action = 0;
+		PizzaArrayDao pizzaArray = new PizzaArrayDao();
 		Scanner userEntry = new Scanner(System.in) ;
+		byte action = 0;
 
 		while(action != 99){
-				PizzeriaAdminConsoleApp.displayMenu();
-				action = userEntry.nextByte();
-		
-				switch (action) {
-				case 1:
-					if(listPizza.length != 0){
-						System.out.println(" Liste des pizzas  :");
-						for(int i=0; i<listPizza.length;i++){
-							System.out.println(listPizza[i].id+" - "+listPizza[i].code+" -> "+ listPizza[i].libelle+"("+listPizza[i].prix+"€)");
-						}
-						System.out.println("\n");
-					}else{
-						System.out.println("pas de pizza enregistrée");
-					}
-					break;
-				case 2:
-					System.out.println("Ajout d’une nouvelle pizza :");
-					System.out.println("Veuillez saisir le code :");
-					String code = userEntry.next();
-					System.out.println("Veuillez saisir le nom (sans espace) ::");
-					String libelle = userEntry.next();
-					System.out.println("Veuillez saisir le prix :");
-					double prix = Double.parseDouble(userEntry.next());
+			PizzeriaAdminConsoleApp.displayMenu();
+			action = userEntry.nextByte();
 
-					// on agrandi le tableau et on recopie les données
-					Pizza[] memoryArray = listPizza ;
-					listPizza = new Pizza[memoryArray.length+1];
-					for(int i=0; i<memoryArray.length;i++){
-						listPizza[i] = memoryArray[i];
-					}
-
-					listPizza[listPizza.length-1] = new Pizza(code, libelle, prix);
-
-					break;
-				case 3:
-					System.out.println(" Mise à jour d’une pizza   :");
-					System.out.println(" Veuillez choisir le code de la pizza à modifier.");
-					code = userEntry.next();
-					int indexModify = PizzeriaAdminConsoleApp.searchPizza(listPizza, code);
-
-					System.out.println("Veuillez saisir le nouveau code ");
-					code = userEntry.next();
-					System.out.println("Veuillez saisir le nouveau nom (sans espace)");
-					libelle = userEntry.next();
-					System.out.println("Veuillez saisir le nouveau prix");
-					prix = Double.parseDouble(userEntry.next());
-
-					listPizza[indexModify].libelle = libelle ;
-					listPizza[indexModify].prix = prix ;
-					listPizza[indexModify].code = code ;
-
-					break;
-				case 4:
-					System.out.println(" Suppression d’une pizza   :");
-					System.out.println("Veuillez choisir le code de la pizza à supprimer :");
-					code = userEntry.next();
-					int indexDel = PizzeriaAdminConsoleApp.searchPizza(listPizza, code);
-					Pizza[] tempListPizza = new Pizza[listPizza.length-1];
-					int tempCounter =0;
-					for(int i=0; i<listPizza.length; i++){							// on recopie le tableau en ignorant les cases null
-						if(i != indexDel){
-							tempListPizza[tempCounter] = listPizza[i];
-							tempCounter++;
-						}
-					}
-					listPizza = tempListPizza;
-					break;
-				default:
-					break;
-				}
+			switch (action) {
+			case 1:
+				ListerPizzasService listService = new ListerPizzasService();
+				listService.executeUC(pizzaArray, userEntry);
+				break;
+			case 2:
+				AjouterPizzaService ajoutService = new AjouterPizzaService();
+				ajoutService.executeUC(pizzaArray, userEntry);
+				
+				break;
+			case 3:
+				ModifierPizzaService modifierService = new ModifierPizzaService();
+				modifierService.executeUC(pizzaArray, userEntry);
+				break;
+			case 4:
+				SupprimerPizzaService supprimerService = new SupprimerPizzaService();
+				supprimerService.executeUC(pizzaArray, userEntry);
+				break;
+			default:
+				break;
 			}
+		}
 
 		userEntry.close();
 	}
@@ -109,22 +58,4 @@ public class PizzeriaAdminConsoleApp {
 		System.out.println("4. Supprimer une pizza");
 		System.out.println("99. Sortir");
 	}
-
-	/**
-	 * Cherche et renvoi l'index d'une pizza dans un tableau 
-	 * @param pizzaList le tableau de pizza dans lequel on effectue la recherche
-	 * @param name Le nom de la pizza recherchée.
-	 * @return index 
-	 */
-	static public int searchPizza(Pizza[] pizzaList, String code){
-		int index = 0 ;
-
-		for(int i=0; i<pizzaList.length; i++){
-			if (pizzaList[i].code.equals(code)){
-				index = i ;
-			}
-		}
-		return index;
-	}
-
 }
