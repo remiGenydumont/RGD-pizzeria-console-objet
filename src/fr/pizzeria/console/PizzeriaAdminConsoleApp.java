@@ -8,6 +8,7 @@ import fr.pizza.services.MenuService;
 import fr.pizza.services.MenuServicesFactory;
 import fr.pizzeria.exception.DeletePizzaException;
 import fr.pizzeria.exception.SavePizzaException;
+import fr.pizzeria.exception.StockageException;
 import fr.pizzeria.exception.UpdatePizzaException;
 
 public class PizzeriaAdminConsoleApp {
@@ -42,21 +43,18 @@ public class PizzeriaAdminConsoleApp {
 		}
 
 		while(action != 99){
+			
 			PizzeriaAdminConsoleApp.displayMenu();
 			action = userEntry.nextByte();
+			
 			if(action == 99){
 				System.out.println("Au revoir.");
 			}else if(action == 1 || action == 2 || action == 3 || action == 4){
+				
 				MenuService service = menuServicesFactory.getAppropriateServices(action);
 				try {
 					service.executeUC(pizzaArray, userEntry);
-				} catch (UpdatePizzaException e) {
-					System.err.println(e.getMessage());
-					e.printStackTrace();
-				}catch (DeletePizzaException e) {
-					System.err.println(e.getMessage());
-					e.printStackTrace();
-				}catch (SavePizzaException e) {
+				} catch (StockageException e) {
 					System.err.println(e.getMessage());
 					e.printStackTrace();
 				}
