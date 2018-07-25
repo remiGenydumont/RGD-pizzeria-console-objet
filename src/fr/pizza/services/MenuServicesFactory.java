@@ -22,9 +22,6 @@ public class MenuServicesFactory {
 		case 4:
 			menuService  = new SupprimerPizzaService();
 			break;
-		default:
-			menuService  = new ListerPizzasService();
-			break;
 		}
 		return menuService ;
 	}

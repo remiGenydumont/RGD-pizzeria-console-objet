@@ -1,15 +1,18 @@
 package fr.pizza.dao;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import fr.pizzeria.model.Pizza;
 
-public class PizzaArrayDao implements IPizzaDao{
+public class PizzaMapDao implements IPizzaDao{
 
-	private ArrayList<Pizza> pizzaList;
+	private Map<String, Pizza> pizzaMap;
 	
-	public PizzaArrayDao() {
+	public PizzaMapDao() {
 		Pizza[] pizzaArray = {
 				new Pizza(0,"PEP", "Pépéroni", 12.50),
 				new Pizza(1,"MAR", "Margherita", 14.00), 
@@ -20,65 +23,55 @@ public class PizzaArrayDao implements IPizzaDao{
 				new Pizza(6,"ORI", "L’orientale", 13.50),
 				new Pizza(7,"IND", "L’indienne", 14.00)
 		};
-		
-		 pizzaList = new ArrayList<Pizza>(Arrays.asList(pizzaArray));
+		this.pizzaMap = new TreeMap<String, Pizza>();
+		for(int i=0 ; i<pizzaArray.length;i++){
+			pizzaMap.put(pizzaArray[i].code, pizzaArray[i]);
+		}
 	}
 	
 	
 	@Override
 	public List<Pizza> findAllPizzas() {
-		return this.pizzaList;
+		return  new ArrayList<Pizza>(pizzaMap.values());
 	}
 	
 	@Override
 	public void saveNewPizza(Pizza pizza) {
-		this.pizzaList.add(pizza);
+		this.pizzaMap.put(pizza.code, pizza);
 	}
 
 	@Override
 	public void updatePizza(String codePizza, Pizza pizza) {
-		Pizza pizzaToUpdate = this.findPizzaByCode(codePizza);
-		pizzaToUpdate.libelle = pizza.libelle ;
-		pizzaToUpdate.prix = pizza.prix ;
-		pizzaToUpdate.code = pizza.code ;
+		this.pizzaMap.replace(codePizza, pizza);
 	}
 
 	@Override
 	public void deletePizza(String codePizza) {
-		Pizza pizzaToDelete = this.findPizzaByCode(codePizza);
-		
-		this.pizzaList.remove(pizzaToDelete);
+		this.pizzaMap.remove(codePizza);
 	}
 
 	@Override
 	public Pizza findPizzaByCode(String codePizza) {
-		Pizza pizzaFind = null ;
-
-		for(int i=0; i<pizzaList.size(); i++){
-			if (pizzaList.get(i).code.equals(codePizza)){
-				pizzaFind = pizzaList.get(i);
-			}
-		}
-		return pizzaFind;
+		return this.pizzaMap.get(codePizza);
 	}
 
 	@Override
 	public boolean pizzaExists(String codePizza) {
 		boolean exist = false ;
-
-		for(int i=0; i<this.pizzaList.size(); i++){
-			if (this.pizzaList.get(i).code.equals(codePizza)){
+		
+		if (this.pizzaMap.get(codePizza) != null){
 				exist = true ;
 			}
-		}
 		return exist;
 	}
 	
 	public String toString() {
 		String content = "" ;
-		for(int i=0; i<this.pizzaList.size();i++){
-			content += this.pizzaList.get(i).toString() + System.getProperty("line.separator");
-		}
+ 
+		for(Map.Entry<String,Pizza> currentPizza : this.pizzaMap.entrySet()) {
+			content += currentPizza.getValue().toString() + System.getProperty("line.separator");
+			}
+		
 		return content;
 	}
 }

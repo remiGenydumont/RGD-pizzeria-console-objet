@@ -39,6 +39,9 @@ public class Pizza {
 		Pizza.counterid ++ ;
 	}
 
+	public String toString(){
+		return this.code+" -> "+ this.libelle+"("+this.prix+"€)";
+	}
 
 
 }

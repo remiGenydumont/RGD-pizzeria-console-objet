@@ -1,8 +1,10 @@
 package fr.pizza.dao;
+import java.util.List;
+
 import fr.pizzeria.model.Pizza;
 
 public interface IPizzaDao {
-	Pizza[] findAllPizzas();
+	List<Pizza> findAllPizzas();
 	
 	/**
 	 * Save a new pizza in the storage
