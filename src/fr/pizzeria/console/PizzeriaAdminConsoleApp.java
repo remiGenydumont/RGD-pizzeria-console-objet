@@ -4,45 +4,29 @@ package fr.pizzeria.console;
 import java.util.Scanner;
 
 import fr.pizza.dao.PizzaArrayDao;
-import fr.pizza.services.AjouterPizzaService;
-import fr.pizza.services.ListerPizzasService;
-import fr.pizza.services.ModifierPizzaService;
-import fr.pizza.services.SupprimerPizzaService;
+import fr.pizza.services.MenuService;
+import fr.pizza.services.MenuServicesFactory;
 
 public class PizzeriaAdminConsoleApp {
 
+	/**
+	 * Point d'entré du programme
+	 * intancie le PizzaArrayDao pour le stockage, le MenuServicesFactory et le scanner pour gérer les entrées utilisateurs et la 
+	 * @param args - non utilisé.
+	 */
 	public static void main(String[] args) {
 		PizzaArrayDao pizzaArray = new PizzaArrayDao();
 		Scanner userEntry = new Scanner(System.in) ;
 		byte action = 0;
+		MenuServicesFactory menuServicesFactory =  new MenuServicesFactory();
 
 		while(action != 99){
 			PizzeriaAdminConsoleApp.displayMenu();
 			action = userEntry.nextByte();
-
-			switch (action) {
-			case 1:
-				ListerPizzasService listService = new ListerPizzasService();
-				listService.executeUC(pizzaArray, userEntry);
-				break;
-			case 2:
-				AjouterPizzaService ajoutService = new AjouterPizzaService();
-				ajoutService.executeUC(pizzaArray, userEntry);
-				
-				break;
-			case 3:
-				ModifierPizzaService modifierService = new ModifierPizzaService();
-				modifierService.executeUC(pizzaArray, userEntry);
-				break;
-			case 4:
-				SupprimerPizzaService supprimerService = new SupprimerPizzaService();
-				supprimerService.executeUC(pizzaArray, userEntry);
-				break;
-			default:
-				break;
-			}
+			
+			MenuService service = menuServicesFactory.getAppropriateServices(action);
+			service.executeUC(pizzaArray, userEntry);
 		}
-
 		userEntry.close();
 	}
 

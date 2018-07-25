@@ -7,6 +7,12 @@ public class Pizza {
 	public String libelle ;
 	public double prix ;
 	
+	/**
+	 * pizza constructor with auto-increment id
+	 * @param code 
+	 * @param libelle
+	 * @param prix
+	 */
 	public Pizza(String code, String libelle, double prix) {
 		super();
 		
@@ -17,6 +23,13 @@ public class Pizza {
 		Pizza.counterid ++ ;
 	}
 	
+	/**
+	 * pizza constructor with given id
+	 * @param id
+	 * @param code
+	 * @param libelle
+	 * @param prix
+	 */
 	public Pizza(int id, String code, String libelle, double prix) {
 		super();
 		this.id = id;

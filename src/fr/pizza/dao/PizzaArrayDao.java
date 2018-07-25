@@ -1,6 +1,4 @@
 package fr.pizza.dao;
-
-import fr.pizzeria.console.PizzeriaAdminConsoleApp;
 import fr.pizzeria.model.Pizza;
 
 public class PizzaArrayDao implements IPizzaDao{
@@ -14,17 +12,11 @@ public class PizzaArrayDao implements IPizzaDao{
 			new Pizza(6,"ORI", "L’orientale", 13.50),
 			new Pizza(7,"IND", "L’indienne", 14.00)
 	};
-
-	public PizzaArrayDao() {
-
-	}
-
-
 	@Override
 	public Pizza[] findAllPizzas() {
 		return this.pizzaList;
 	}
-
+	
 	@Override
 	public void saveNewPizza(Pizza pizza) {
 		Pizza[] memoryArray = this.pizzaList ;
@@ -32,6 +24,7 @@ public class PizzaArrayDao implements IPizzaDao{
 		for(int i=0; i<memoryArray.length;i++){
 			pizzaList[i] = memoryArray[i];
 		}
+		pizzaList[pizzaList.length-1] = pizza;
 	}
 
 	@Override
@@ -47,7 +40,7 @@ public class PizzaArrayDao implements IPizzaDao{
 		Pizza[] tempListPizza = new Pizza[this.pizzaList.length-1];
 		int tempCounter =0;
 		for(int i=0; i<this.pizzaList.length; i++){
-			if(this.pizzaList[i].code != codePizza){
+			if(!this.pizzaList[i].code.equals(codePizza) ){
 				tempListPizza[tempCounter] = this.pizzaList[i];
 				tempCounter++;
 			}

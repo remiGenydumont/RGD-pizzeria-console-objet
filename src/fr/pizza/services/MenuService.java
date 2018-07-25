@@ -6,6 +6,11 @@ import fr.pizza.dao.PizzaArrayDao;
 
 public abstract class MenuService {
 	
-	abstract void executeUC(PizzaArrayDao pizzaArray, Scanner userEntry);
+	/**
+	 * run the user case 
+	 * @param pizzaArray - the storage array for pizza
+	 * @param userEntry - the scanner allowing to get user keyboard entry 
+	 */
+	public abstract void executeUC(PizzaArrayDao pizzaArray, Scanner userEntry);
 
 }
