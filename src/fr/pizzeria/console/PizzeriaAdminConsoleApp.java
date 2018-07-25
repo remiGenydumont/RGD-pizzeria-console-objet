@@ -3,97 +3,30 @@ package fr.pizzeria.console;
 
 import java.util.Scanner;
 
-import fr.pizzeria.model.Pizza;
+import fr.pizza.dao.PizzaArrayDao;
+import fr.pizza.services.MenuService;
+import fr.pizza.services.MenuServicesFactory;
 
 public class PizzeriaAdminConsoleApp {
 
+	/**
+	 * Point d'entré du programme
+	 * intancie le PizzaArrayDao pour le stockage, le MenuServicesFactory et le scanner pour gérer les entrées utilisateurs et la 
+	 * @param args - non utilisé.
+	 */
 	public static void main(String[] args) {
-		Pizza[] listPizza = {
-				new Pizza(0,"PEP", "Pépéroni", 12.50),
-				new Pizza(1,"MAR", "Margherita", 14.00), 
-				new Pizza(2,"REIN", "La Reine", 11.50),
-				new Pizza(3,"FRO", "La 4 fromages", 12.00),
-				new Pizza(4,"CAN", "La cannibale", 12.50),
-				new Pizza(5,"SAV", "La savoyarde", 13.00),
-				new Pizza(6,"ORI", "L’orientale", 13.50),
-				new Pizza(7,"IND", "L’indienne", 14.00)
-		};
-		byte action = 0;
+		PizzaArrayDao pizzaArray = new PizzaArrayDao();
 		Scanner userEntry = new Scanner(System.in) ;
+		byte action = 0;
+		MenuServicesFactory menuServicesFactory =  new MenuServicesFactory();
 
 		while(action != 99){
-				PizzeriaAdminConsoleApp.displayMenu();
-				action = userEntry.nextByte();
-		
-				switch (action) {
-				case 1:
-					if(listPizza.length != 0){
-						System.out.println(" Liste des pizzas  :");
-						for(int i=0; i<listPizza.length;i++){
-							System.out.println(listPizza[i].id+" - "+listPizza[i].code+" -> "+ listPizza[i].libelle+"("+listPizza[i].prix+"€)");
-						}
-						System.out.println("\n");
-					}else{
-						System.out.println("pas de pizza enregistrée");
-					}
-					break;
-				case 2:
-					System.out.println("Ajout d’une nouvelle pizza :");
-					System.out.println("Veuillez saisir le code :");
-					String code = userEntry.next();
-					System.out.println("Veuillez saisir le nom (sans espace) ::");
-					String libelle = userEntry.next();
-					System.out.println("Veuillez saisir le prix :");
-					double prix = Double.parseDouble(userEntry.next());
-
-					// on agrandi le tableau et on recopie les données
-					Pizza[] memoryArray = listPizza ;
-					listPizza = new Pizza[memoryArray.length+1];
-					for(int i=0; i<memoryArray.length;i++){
-						listPizza[i] = memoryArray[i];
-					}
-
-					listPizza[listPizza.length-1] = new Pizza(code, libelle, prix);
-
-					break;
-				case 3:
-					System.out.println(" Mise à jour d’une pizza   :");
-					System.out.println(" Veuillez choisir le code de la pizza à modifier.");
-					code = userEntry.next();
-					int indexModify = PizzeriaAdminConsoleApp.searchPizza(listPizza, code);
-
-					System.out.println("Veuillez saisir le nouveau code ");
-					code = userEntry.next();
-					System.out.println("Veuillez saisir le nouveau nom (sans espace)");
-					libelle = userEntry.next();
-					System.out.println("Veuillez saisir le nouveau prix");
-					prix = Double.parseDouble(userEntry.next());
-
-					listPizza[indexModify].libelle = libelle ;
-					listPizza[indexModify].prix = prix ;
-					listPizza[indexModify].code = code ;
-
-					break;
-				case 4:
-					System.out.println(" Suppression d’une pizza   :");
-					System.out.println("Veuillez choisir le code de la pizza à supprimer :");
-					code = userEntry.next();
-					int indexDel = PizzeriaAdminConsoleApp.searchPizza(listPizza, code);
-					Pizza[] tempListPizza = new Pizza[listPizza.length-1];
-					int tempCounter =0;
-					for(int i=0; i<listPizza.length; i++){							// on recopie le tableau en ignorant les cases null
-						if(i != indexDel){
-							tempListPizza[tempCounter] = listPizza[i];
-							tempCounter++;
-						}
-					}
-					listPizza = tempListPizza;
-					break;
-				default:
-					break;
-				}
-			}
-
+			PizzeriaAdminConsoleApp.displayMenu();
+			action = userEntry.nextByte();
+			
+			MenuService service = menuServicesFactory.getAppropriateServices(action);
+			service.executeUC(pizzaArray, userEntry);
+		}
 		userEntry.close();
 	}
 
@@ -109,22 +42,4 @@ public class PizzeriaAdminConsoleApp {
 		System.out.println("4. Supprimer une pizza");
 		System.out.println("99. Sortir");
 	}
-
-	/**
-	 * Cherche et renvoi l'index d'une pizza dans un tableau 
-	 * @param pizzaList le tableau de pizza dans lequel on effectue la recherche
-	 * @param name Le nom de la pizza recherchée.
-	 * @return index 
-	 */
-	static public int searchPizza(Pizza[] pizzaList, String code){
-		int index = 0 ;
-
-		for(int i=0; i<pizzaList.length; i++){
-			if (pizzaList[i].code.equals(code)){
-				index = i ;
-			}
-		}
-		return index;
-	}
-
 }
