@@ -61,8 +61,7 @@ public class PizzeriaAdminConsoleApp {
 			}
 		}
 		userEntry.close();
-	}
-
+	} 
 	/**
 	 * Methode permettant l'affiche du menu dans la console
 	 */

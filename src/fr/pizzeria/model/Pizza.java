@@ -6,41 +6,48 @@ public class Pizza {
 	public String code ;
 	public String libelle ;
 	public double prix ;
+	public CategoryPizza categorie;
 	
 	/**
 	 * pizza constructor with auto-increment id
-	 * @param code 
-	 * @param libelle
-	 * @param prix
+	 * @param code pizza code 
+	 * @param libelle pizza name
+	 * @param prix pizza price
+	 * @param categorie pizza category
 	 */
-	public Pizza(String code, String libelle, double prix) {
+	public Pizza(String code, String libelle, double prix, CategoryPizza categorie) {
 		super();
 		
 		this.id = counterid;
 		this.code = code;
 		this.libelle = libelle;
 		this.prix = prix;
+		this.categorie = categorie;
 		Pizza.counterid ++ ;
 	}
 	
 	/**
 	 * pizza constructor with given id
-	 * @param id
-	 * @param code
-	 * @param libelle
-	 * @param prix
+	 * @param id pizza id
+	  * @param code pizza code 
+	 * @param libelle pizza name
+	 * @param prix pizza price
+	 * @param categorie pizza category
 	 */
-	public Pizza(int id, String code, String libelle, double prix) {
+	public Pizza(int id, String code, String libelle, double prix, CategoryPizza categorie) {
 		super();
 		this.id = id;
 		this.code = code;
 		this.libelle = libelle;
 		this.prix = prix;
+		this.categorie = categorie;
 		Pizza.counterid ++ ;
 	}
-
+	/**
+	 * 
+	 */
 	public String toString(){
-		return this.code+" -> "+ this.libelle+"("+this.prix+"€)";
+		return this.code+" -> "+ this.libelle+"("+this.prix+"€) - "+this.categorie;
 	}
 
 
