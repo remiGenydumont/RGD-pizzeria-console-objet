@@ -4,26 +4,31 @@ public enum CategoryPizza {
 	VIANDE("viande"),
 	POISSON("Poisson"),
 	SANS_VIANDE("Sans Viande");
-	private String cat;
-	
-	private CategoryPizza(String cat){
-		this.cat = cat;
+	private String name;
+
+	private CategoryPizza(String name){
+		this.name = name;
 	}
 
 	public static CategoryPizza getByName(String name){
 		for(CategoryPizza c  : CategoryPizza.values()){
-			if(c.getCat().equals(name)){
+			if(c.getName().equals(name)){
 				return c;
 			}
 		}
 		return null;
 	}
+	public String toString(){
+		return this.getName();
+	}
 	
-	public String getCat() {
-		return cat;
+	
+	public String getName() {
+		return name;
 	}
 
-	public void setCat(String cat) {
-		this.cat = cat;
+	public void setName(String name) {
+		this.name = name;
 	}
+
 }

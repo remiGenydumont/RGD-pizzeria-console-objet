@@ -27,7 +27,7 @@ public class AjouterPizzaService extends MenuService {
 		
 		System.out.print("Veuillez saisir la catégorie : ");
 		for(CategoryPizza c  : CategoryPizza.values()){
-			System.out.print(c.getCat() +", ");
+			System.out.print(c.getName() +", ");
 		}
 		System.out.print("\n");
 		String categorie = userEntry.next();
